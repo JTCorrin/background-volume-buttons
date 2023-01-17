@@ -1,7 +1,30 @@
 # background-volume-buttons
 
-This plugin listens for and reacts to volume button presses when the app is in the background
+This capacitor.js plugin listens for and reacts to volume button presses when the app is in the background
 
+```
+import { App } from '@capacitor/app';
+import { BackgroundVolumeButtonListener } from "background-volume-buttons";
+        
+App.addListener('appStateChange', ({ isActive }) => {
+    console.log('App state changed. Is active?', isActive);
+    if (!isActive) {
+        console.debug("App going inactive / background")
+        BackgroundVolumeButtonListener.startListening({
+            timeout: 1000,
+            triggerCount: 3,
+            listenerName: "volumeEventTriggered"
+        })
+    } else {
+        BackgroundVolumeButtonListener.stopListening()
+    }
+});
+
+// Later
+BackgroundVolumeButtonListener.addListener("volumeEventTriggered", async () => {
+    // do stuff
+}
+```
 ## Install
 
 ```bash

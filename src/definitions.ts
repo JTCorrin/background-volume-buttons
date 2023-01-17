@@ -17,6 +17,7 @@ export interface BackgroundVolumeButtonListenerOptions {
 export interface BackgroundVolumeButtonListenerPlugin {
   /**
    * Adds a listener to the volume buttons and fires an event when the volume is changed.
+   * 
    */
   startListening(options: BackgroundVolumeButtonListenerOptions): Promise<void>;
   /**
