@@ -28,7 +28,7 @@ npx cap sync
 startListening(options: BackgroundVolumeButtonListenerOptions) => Promise<void>
 ```
 
-Adds a listener to the volume buttons and fires an event when the volume button is clicked 4 times
+Adds a listener to the volume buttons and fires an event when the volume is changed.
 
 | Param         | Type                                                                                                    |
 | ------------- | ------------------------------------------------------------------------------------------------------- |
@@ -53,10 +53,10 @@ Removes above listener
 
 #### BackgroundVolumeButtonListenerOptions
 
-| Prop               | Type                |
-| ------------------ | ------------------- |
-| **`triggerCount`** | <code>number</code> |
-| **`timeout`**      | <code>number</code> |
-| **`listenerName`** | <code>string</code> |
+| Prop               | Type                | Description                                                                                               |
+| ------------------ | ------------------- | --------------------------------------------------------------------------------------------------------- |
+| **`triggerCount`** | <code>number</code> | The number of times the volume should be changed before the event is fired. Defaults to 3                 |
+| **`timeout`**      | <code>number</code> | The max time in milliseconds before the `triggerCount` resets. Defaults to 1000                           |
+| **`listenerName`** | <code>string</code> | Required. The string name of the listener you would like the event to broadcast to i.e. `volumeTriggered` |
 
 </docgen-api>
