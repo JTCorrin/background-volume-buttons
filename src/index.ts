@@ -2,9 +2,10 @@ import { registerPlugin } from '@capacitor/core';
 
 import type { BackgroundVolumeButtonListenerPlugin } from './definitions';
 
-const BackgroundVolumeButtonListener = registerPlugin<BackgroundVolumeButtonListenerPlugin>('BackgroundVolumeButtonListener', {
-  web: () => import('./web').then(m => new m.BackgroundVolumeButtonListenerWeb()),
-});
+const BackgroundVolumeButtonListener =
+  registerPlugin<BackgroundVolumeButtonListenerPlugin>(
+    'BackgroundVolumeButtonListener',
+  );
 
 export * from './definitions';
 export { BackgroundVolumeButtonListener };

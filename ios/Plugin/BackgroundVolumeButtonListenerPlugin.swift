@@ -9,10 +9,48 @@ import Capacitor
 public class BackgroundVolumeButtonListenerPlugin: CAPPlugin {
     private let implementation = BackgroundVolumeButtonListener()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    var buttonPressCount = 0
+    var triggerCount = 3
+    var timeout = 1000
+    var listenerName = ""
+    var resetTimer: Timer?
+    
+    @objc func startListening(_ call: CAPPluginCall) {
+        guard let listenerName = call.options["listenerName"] as? String else {
+            call.reject("Must provide an listener name")
+            return
+        }
+
+        triggerCount = call.getInt("triggerCount") ?? triggerCount
+        timeout = call.getInt("timeout") ?? timeout
+        listenerName = call.getString("listenerName") ?? listenerName
+
+        NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged), name: AVAudioSession.systemVolumeDidChangeNotification, object: nil)
+        call.resolve()
+    }
+    
+    @objc func stopListening(_ call: CAPPluginCall) {
+        NotificationCenter.default.removeObserver(self, name: AVAudioSession.systemVolumeDidChangeNotification, object: nil)
+        resetTimer?.invalidate()
+        buttonPressCount = 0
+        call.resolve()
+    }
+    
+    @objc func volumeChanged(_ notification: Notification) {
+        if let userInfo = notification.userInfo {
+            let volumeChangeType = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as! String
+            if volumeChangeType == "ExplicitVolumeChange" {
+                buttonPressCount += 1
+                resetTimer?.invalidate()
+                resetTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { timer in
+                    buttonPressCount = 0
+                }
+                
+                if buttonPressCount == triggerCount {
+                    buttonPressCount = 0
+                    self.notifyListeners(listenerName, data: [:])
+                }
+            }
+        }
     }
 }
