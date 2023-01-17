@@ -33,7 +33,7 @@ public class BackgroundVolumeButtonListenerPlugin extends Plugin {
         }
         var triggerCount = call.getInt("triggerCount", 3);
         var clickTimeout = call.getInt("timeout", 1000);
-        var bringToForeground = call.getBool("bringToForeground", true);
+        var bringToForeground = call.getBoolean("bringToForeground", true);
         var listenerName = call.getString("listenerName");
         receiver =
             new BroadcastReceiver() {

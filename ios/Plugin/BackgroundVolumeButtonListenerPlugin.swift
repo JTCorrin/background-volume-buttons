@@ -13,6 +13,7 @@ public class BackgroundVolumeButtonListenerPlugin: CAPPlugin {
     var triggerCount = 3
     var timeout = 1000
     var listenerName = ""
+    var bringToForeground = true
     var resetTimer: Timer?
     
     @objc func startListening(_ call: CAPPluginCall) {
@@ -24,6 +25,7 @@ public class BackgroundVolumeButtonListenerPlugin: CAPPlugin {
         triggerCount = call.getInt("triggerCount") ?? triggerCount
         timeout = call.getInt("timeout") ?? timeout
         listenerName = call.getString("listenerName") ?? listenerName
+        bringToForeground = call.getBoolean("bringToForeground") ?? bringToForeground
 
         NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged), name: AVAudioSession.systemVolumeDidChangeNotification, object: nil)
         call.resolve()
@@ -49,6 +51,15 @@ public class BackgroundVolumeButtonListenerPlugin: CAPPlugin {
                 if buttonPressCount == triggerCount {
                     buttonPressCount = 0
                     self.notifyListeners(listenerName, data: [:])
+
+                    if bringToForeground {
+                        UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                                appDelegate.window?.makeKeyAndVisible()
+                            }
+                        }
+                    }
                 }
             }
         }
