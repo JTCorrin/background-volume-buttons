@@ -33,6 +33,7 @@ public class BackgroundVolumeButtonListenerPlugin extends Plugin {
         }
         var triggerCount = call.getInt("triggerCount", 3);
         var clickTimeout = call.getInt("timeout", 1000);
+        var bringToForeground = call.getBool("bringToForeground", true);
         var listenerName = call.getString("listenerName");
         receiver =
             new BroadcastReceiver() {
@@ -47,6 +48,11 @@ public class BackgroundVolumeButtonListenerPlugin extends Plugin {
                             buttonPressCount = 0;
                             JSObject ret = new JSObject();
                             notifyListeners(listenerName, ret);
+                            if (bringToForeground) {
+                                Intent bringToForegroundIntent = new Intent(context, RootActivity.class);
+                                bringToForegroundIntent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(bringToForegroundIntent);
+                            }
                         }
                     }
                 }

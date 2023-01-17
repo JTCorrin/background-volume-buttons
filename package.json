@@ -1,6 +1,6 @@
 {
   "name": "background-volume-buttons",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "This capacitor.js plugin listens for and reacts to volume button presses when the app is in the background",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
