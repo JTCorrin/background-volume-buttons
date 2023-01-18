@@ -11,11 +11,6 @@ export interface BackgroundVolumeButtonListenerOptions {
    * Required. The string name of the listener you would like the event to broadcast to i.e. `volumeTriggered`
    */
   listenerName: string;
-  /**
-   * Do you want the event to launch the app automatically i.e. you don't need to do this from the javascript side
-   * Defaults to true
-   */
-  bringToForeground: boolean;
 }
 
 export interface BackgroundVolumeButtonListenerPlugin {

@@ -76,11 +76,10 @@ Removes above listener
 
 #### BackgroundVolumeButtonListenerOptions
 
-| Prop                    | Type                 | Description                                                                                                                    |
-| ----------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| **`triggerCount`**      | <code>number</code>  | The number of times the volume should be changed before the event is fired. Defaults to 3                                      |
-| **`timeout`**           | <code>number</code>  | The max time in milliseconds before the `triggerCount` resets. Defaults to 1000                                                |
-| **`listenerName`**      | <code>string</code>  | Required. The string name of the listener you would like the event to broadcast to i.e. `volumeTriggered`                      |
-| **`bringToForeground`** | <code>boolean</code> | Do you want the event to launch the app automatically i.e. you don't need to do this from the javascript side Defaults to true |
+| Prop               | Type                | Description                                                                                               |
+| ------------------ | ------------------- | --------------------------------------------------------------------------------------------------------- |
+| **`triggerCount`** | <code>number</code> | The number of times the volume should be changed before the event is fired. Defaults to 3                 |
+| **`timeout`**      | <code>number</code> | The max time in milliseconds before the `triggerCount` resets. Defaults to 1000                           |
+| **`listenerName`** | <code>string</code> | Required. The string name of the listener you would like the event to broadcast to i.e. `volumeTriggered` |
 
 </docgen-api>
