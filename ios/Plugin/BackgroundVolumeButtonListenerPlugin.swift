@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import AVFoundation
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -24,14 +25,14 @@ public class BackgroundVolumeButtonListenerPlugin: CAPPlugin {
 
         triggerCount = call.getInt("triggerCount") ?? triggerCount
         timeout = call.getInt("timeout") ?? timeout
-        listenerName = call.getString("listenerName") ?? listenerName
+        //listenerName = call.getString("listenerName") ?? listenerName
 
-        NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged), name: AVAudioSession.systemVolumeDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged), name: "AVSystemController_SystemVolumeDidChangeNotification", object: nil)
         call.resolve()
     }
     
     @objc func stopListening(_ call: CAPPluginCall) {
-        NotificationCenter.default.removeObserver(self, name: AVAudioSession.systemVolumeDidChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: "AVSystemController_SystemVolumeDidChangeNotification", object: nil)
         resetTimer?.invalidate()
         buttonPressCount = 0
         call.resolve()
@@ -41,14 +42,14 @@ public class BackgroundVolumeButtonListenerPlugin: CAPPlugin {
         if let userInfo = notification.userInfo {
             let volumeChangeType = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as! String
             if volumeChangeType == "ExplicitVolumeChange" {
-                buttonPressCount += 1
+                self.buttonPressCount += 1
                 resetTimer?.invalidate()
                 resetTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { timer in
-                    buttonPressCount = 0
+                    self.buttonPressCount = 0
                 }
                 
                 if buttonPressCount == triggerCount {
-                    buttonPressCount = 0
+                    self.buttonPressCount = 0
                     self.notifyListeners(listenerName, data: [:])
                 }
             }
