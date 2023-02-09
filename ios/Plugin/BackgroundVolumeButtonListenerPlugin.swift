@@ -18,21 +18,21 @@ public class BackgroundVolumeButtonListenerPlugin: CAPPlugin {
     var resetTimer: Timer?
     
     @objc func startListening(_ call: CAPPluginCall) {
-        guard let listenerName = call.options["listenerName"] as? String else {
-            call.reject("Must provide an listener name")
-            return
-        }
+        // guard let listenerName = call.options["listenerName"] as? String else {
+        //     call.reject("Must provide an listener name")
+        //     return
+        // }
 
         triggerCount = call.getInt("triggerCount") ?? triggerCount
         timeout = call.getInt("timeout") ?? timeout
         //listenerName = call.getString("listenerName") ?? listenerName
 
-        NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged), name: "AVSystemController_SystemVolumeDidChangeNotification", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged), name: NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
         call.resolve()
     }
     
     @objc func stopListening(_ call: CAPPluginCall) {
-        NotificationCenter.default.removeObserver(self, name: "AVSystemController_SystemVolumeDidChangeNotification", object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
         resetTimer?.invalidate()
         buttonPressCount = 0
         call.resolve()
